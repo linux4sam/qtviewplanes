@@ -129,7 +129,7 @@ public:
     {
         painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
         drawBox(painter, option->state & QStyle::State_Selected, m_bounding);
-        drawText(painter, "Software QGraphicsObject");
+        drawText(painter, "Software");
 
         Q_UNUSED(option);
         Q_UNUSED(widget);
@@ -317,7 +317,7 @@ public:
         painter2.setClipRect(boundingRect());
 
         drawBox(&painter2, m_focus, m_bounding);
-        drawText(&painter2, "Hardware QGraphicsObject");
+        drawText(&painter2, "Hardware");
 
         painter->begin(m_fb);
         painter->setCompositionMode(QPainter::CompositionMode_Source);
@@ -574,6 +574,13 @@ public:
         return false;
     }
 
+    void keyPressEvent(QKeyEvent* k)
+    {
+        if(k->key() == 48){
+            QApplication::instance()->exit();
+        }
+    }
+
 protected:
 
     bool viewportEvent(QEvent *event) override
@@ -600,7 +607,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     PlaneManager planes;
-    if (!planes.load("screen.config"))
+    if (!planes.load("qtviewplanes.screen"))
     {
         QMessageBox::critical(0, "Failed to Setup Planes",
                               "This demo requires a version of Qt that provides access to the DRI file descriptor,"
@@ -625,7 +632,7 @@ int main(int argc, char *argv[])
     QGraphicsTextItem* text = new QGraphicsTextItem();
     text->setDefaultTextColor(Qt::white);
     text->setPos(10, screen.height() - 40);
-    text->setPlainText("Qt Graphics View Framework Software vs. Hardware");
+    text->setPlainText("Qt Graphics View Framework + libplanes");
     scene.addItem(text);
 
     QProgressBar* progress = new QProgressBar();

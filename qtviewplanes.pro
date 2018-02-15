@@ -37,14 +37,17 @@ HEADERS  += \
     tools.h
 
 DISTFILES += \
-    screen.config
+    qtviewplanes.screen
 
-target.path = /root
-INSTALLS += target
-
-configfile.path = /root
-configfile.files = screen.config
-INSTALLS += configfile
+target.path = /opt/qtviewplanes
+target.files = qtviewplanes
+extra.path = /opt/qtviewplanes
+extra.files = resources/qtviewplanes.sh qtviewplanes.screen
+configfile.path = /opt/ApplicationLauncher/applications/xml
+configfile.files = resources/12-qtviewplanes.xml
+imagefile.path = /opt/ApplicationLauncher/applications/resources
+imagefile.files = resources/qtviewplanes.png
+INSTALLS += target configfile imagefile extra
 
 CONFIG += link_pkgconfig
 PKGCONFIG += libdrm cairo libcjson lua
@@ -53,8 +56,8 @@ PKGCONFIG += libdrm cairo libcjson lua
 
 LOCALPLANES {
     PKGCONFIG += tslib
-    INCLUDEPATH += /home/jhenderson/planes/include/
-    LIBS += -L/home/jhenderson/planes/src/.libs -lplanes
+    INCLUDEPATH += $(HOME)/planes/include/
+    LIBS += -L$(HOME)/planes/src/.libs -lplanes
 } else {
     PKGCONFIG += libplanes
 }
