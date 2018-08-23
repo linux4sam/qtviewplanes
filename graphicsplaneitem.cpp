@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 #include "graphicsplaneitem.h"
+#include <planes/plane.h>
 #include <QPainter>
 #include <QDebug>
 #include <QEvent>

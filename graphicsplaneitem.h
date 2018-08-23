@@ -73,4 +73,3 @@ protected:
 };
 
 #endif // GRAPHICSPLANEITEM_H
-

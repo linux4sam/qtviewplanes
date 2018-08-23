@@ -510,18 +510,30 @@ private:
     qreal m_startScale;
 };
 
+#ifdef ALL_SOFTWARE
+class MyGraphicsView : public QGraphicsView
+#else
 class MyGraphicsView : public GraphicsPlaneView
+#endif
 {
 public:
     MyGraphicsView(QGraphicsScene *scene, PlaneManager& planes)
+#ifdef ALL_SOFTWARE
+        : QGraphicsView(scene)
+#else
         : GraphicsPlaneView(scene)
+#endif
     {
         m_box1 = new MyGraphicsItem(QRectF(0,0,50,50));
         scene->addItem(m_box1);
-
+#ifdef ALL_SOFTWARE
+        m_box2 = new MyGraphicsItem(QRectF(0,0,50,50));
+        scene->addItem(m_box2);
+#else
         m_box2 = new MyGraphicsPlaneItem(planes.get("overlay1"),
                                        QRectF(0,0,50,50));
         scene->addItem(m_box2);
+#endif
 
         viewport()->grabGesture(Qt::TapAndHoldGesture);
     }
@@ -594,14 +606,22 @@ protected:
             ret = gestureEvent(static_cast<QGestureEvent*>(event));
 
         if (!ret)
+#ifdef ALL_SOFTWARE
+            return QGraphicsView::viewportEvent(event);
+#else
             return GraphicsPlaneView::viewportEvent(event);
+#endif
 
         return true;
     }
 
 private:
     MyGraphicsItem* m_box1;
+#ifdef ALL_SOFTWARE
+    MyGraphicsItem* m_box2;
+#else
     MyGraphicsPlaneItem* m_box2;
+#endif
 };
 
 int main(int argc, char *argv[])
@@ -609,6 +629,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     PlaneManager planes;
+#ifndef ALL_SOFTWARE
     if (!planes.load("qtviewplanes.screen"))
     {
         QMessageBox::critical(0, "Failed to Setup Planes",
@@ -617,7 +638,7 @@ int main(int argc, char *argv[])
                               "QT_QPA_FB_DRM set.\n");
         return -1;
     }
-
+#endif
     QRect screen = QApplication::desktop()->screenGeometry();
 
     QGraphicsScene scene;
