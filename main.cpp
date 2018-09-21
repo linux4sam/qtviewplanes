@@ -8,6 +8,7 @@
 #include "graphicsplaneitem.h"
 #include "graphicsplaneview.h"
 #include "tools.h"
+#include <cmath>
 
 #include <QApplication>
 #include <QTimer>
